@@ -1,21 +1,45 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { Router } from 'react-router';
+import { Link } from 'react-router-dom';
+import Loadable from 'react-loadable';
+import createHistory from 'history/createBrowserHistory';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+import Loading from './components/Loading';
+
+const Home = new Loadable({
+  loader: () => import('./containers/Home'),
+  loading: Loading,
+});
+
+const About = new Loadable({
+  loader: () => import('./containers/About'),
+  loading: Loading,
+});
+
+const Profile = new Loadable({
+  loader: () => import('./containers/Profile'),
+  loading: Loading,
+});
+
+const history = createHistory();
+
+export default () => (
+  <Router history={history}>
+    <div>
+      <div>
+        <Link to="/">Home</Link>
+        &nbsp;|&nbsp;
+        <Link to="/about">About</Link>
+        &nbsp;|&nbsp;
+        <Link to="/profile">Profile</Link>
+        &nbsp;|&nbsp;
       </div>
-    );
-  }
-}
-
-export default App;
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/about" component={About} />
+        <Route path="/profile" component={Profile} />
+      </Switch>
+    </div>
+  </Router>
+);
